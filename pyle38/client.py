@@ -118,8 +118,9 @@ class Client:
     __redis = None
     __format: str = Format.RESP.value
 
-    def __init__(self, url: str) -> None:
+    def __init__(self, url: str, password: str) -> None:
         self.url = url
+        self.password = password
         self.__redis = None
         self.__format = Format.RESP.value
 
@@ -168,10 +169,12 @@ class Client:
             url_components = parse_url(self.url)
             host: str = url_components.get("host") or TILE38_DEFAULT_HOST
             port: int = url_components.get("port") or TILE38_DEFAULT_PORT
+            password: str = self.password
 
             r: redis.Redis = redis.Redis(
                 host=host,
                 port=port,
+                password=password,
                 encoding="utf-8",
                 single_connection_client=True,
                 decode_responses=True,
